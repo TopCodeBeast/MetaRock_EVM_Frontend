@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import axios from "axios";
 import { create } from "ipfs-http-client";
-import { MarketItemStructOutput } from "../hardhat/typechain-types/Marketplace";
+import { MarketItemStructOutput } from "./typechain-types/Marketplace";
 import { getTokenContract } from "./pages/api/blockchainService";
 import { MarketItem } from "./pages";
 
