@@ -47,8 +47,9 @@ export type MarketItemStructOutput = [
 
 export interface MarketplaceInterface extends utils.Interface {
   functions: {
+    "createMarketBuy(address,uint256)": FunctionFragment;
     "createMarketItem(address,uint256,uint256)": FunctionFragment;
-    "createMarketSale(address,uint256)": FunctionFragment;
+    "createMarketSell(address,uint256,uint256)": FunctionFragment;
     "getAllMarketItems()": FunctionFragment;
     "getListingCommision()": FunctionFragment;
     "getMyNFTs(address)": FunctionFragment;
@@ -57,12 +58,16 @@ export interface MarketplaceInterface extends utils.Interface {
   };
 
   encodeFunctionData(
+    functionFragment: "createMarketBuy",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "createMarketItem",
     values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "createMarketSale",
-    values: [string, BigNumberish]
+    functionFragment: "createMarketSell",
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getAllMarketItems",
@@ -83,11 +88,15 @@ export interface MarketplaceInterface extends utils.Interface {
   ): string;
 
   decodeFunctionResult(
+    functionFragment: "createMarketBuy",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "createMarketItem",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createMarketSale",
+    functionFragment: "createMarketSell",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -106,13 +115,29 @@ export interface MarketplaceInterface extends utils.Interface {
   ): Result;
 
   events: {
+    "MarketItemBuy(uint256,uint256,uint256,address,address,address)": EventFragment;
     "MarketItemCreated(uint256,uint256,uint256,address,address,address)": EventFragment;
-    "MarketItemSold(uint256,uint256,uint256,address,address,address)": EventFragment;
+    "MarketItemSell(uint256,uint256,uint256,address,address,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "MarketItemBuy"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MarketItemCreated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "MarketItemSold"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MarketItemSell"): EventFragment;
 }
+
+export type MarketItemBuyEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber, string, string, string],
+  {
+    price: BigNumber;
+    itemId: BigNumber;
+    tokenId: BigNumber;
+    nftContract: string;
+    seller: string;
+    buyer: string;
+  }
+>;
+
+export type MarketItemBuyEventFilter = TypedEventFilter<MarketItemBuyEvent>;
 
 export type MarketItemCreatedEvent = TypedEvent<
   [BigNumber, BigNumber, BigNumber, string, string, string],
@@ -129,7 +154,7 @@ export type MarketItemCreatedEvent = TypedEvent<
 export type MarketItemCreatedEventFilter =
   TypedEventFilter<MarketItemCreatedEvent>;
 
-export type MarketItemSoldEvent = TypedEvent<
+export type MarketItemSellEvent = TypedEvent<
   [BigNumber, BigNumber, BigNumber, string, string, string],
   {
     price: BigNumber;
@@ -137,11 +162,11 @@ export type MarketItemSoldEvent = TypedEvent<
     tokenId: BigNumber;
     nftContract: string;
     seller: string;
-    buyer: string;
+    owner: string;
   }
 >;
 
-export type MarketItemSoldEventFilter = TypedEventFilter<MarketItemSoldEvent>;
+export type MarketItemSellEventFilter = TypedEventFilter<MarketItemSellEvent>;
 
 export interface Marketplace extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -170,6 +195,12 @@ export interface Marketplace extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    createMarketBuy(
+      nftContract: string,
+      itemId: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     createMarketItem(
       nftContract: string,
       tokenId: BigNumberish,
@@ -177,9 +208,10 @@ export interface Marketplace extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    createMarketSale(
+    createMarketSell(
       nftContract: string,
       itemId: BigNumberish,
+      price: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -204,6 +236,12 @@ export interface Marketplace extends BaseContract {
     ): Promise<[MarketItemStructOutput[]]>;
   };
 
+  createMarketBuy(
+    nftContract: string,
+    itemId: BigNumberish,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   createMarketItem(
     nftContract: string,
     tokenId: BigNumberish,
@@ -211,9 +249,10 @@ export interface Marketplace extends BaseContract {
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  createMarketSale(
+  createMarketSell(
     nftContract: string,
     itemId: BigNumberish,
+    price: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -236,6 +275,12 @@ export interface Marketplace extends BaseContract {
   getNFTsCreated(overrides?: CallOverrides): Promise<MarketItemStructOutput[]>;
 
   callStatic: {
+    createMarketBuy(
+      nftContract: string,
+      itemId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     createMarketItem(
       nftContract: string,
       tokenId: BigNumberish,
@@ -243,9 +288,10 @@ export interface Marketplace extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    createMarketSale(
+    createMarketSell(
       nftContract: string,
       itemId: BigNumberish,
+      price: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -271,6 +317,23 @@ export interface Marketplace extends BaseContract {
   };
 
   filters: {
+    "MarketItemBuy(uint256,uint256,uint256,address,address,address)"(
+      price?: null,
+      itemId?: BigNumberish | null,
+      tokenId?: BigNumberish | null,
+      nftContract?: string | null,
+      seller?: null,
+      buyer?: null
+    ): MarketItemBuyEventFilter;
+    MarketItemBuy(
+      price?: null,
+      itemId?: BigNumberish | null,
+      tokenId?: BigNumberish | null,
+      nftContract?: string | null,
+      seller?: null,
+      buyer?: null
+    ): MarketItemBuyEventFilter;
+
     "MarketItemCreated(uint256,uint256,uint256,address,address,address)"(
       price?: null,
       itemId?: BigNumberish | null,
@@ -288,25 +351,31 @@ export interface Marketplace extends BaseContract {
       owner?: null
     ): MarketItemCreatedEventFilter;
 
-    "MarketItemSold(uint256,uint256,uint256,address,address,address)"(
+    "MarketItemSell(uint256,uint256,uint256,address,address,address)"(
       price?: null,
       itemId?: BigNumberish | null,
       tokenId?: BigNumberish | null,
       nftContract?: string | null,
       seller?: null,
-      buyer?: null
-    ): MarketItemSoldEventFilter;
-    MarketItemSold(
+      owner?: null
+    ): MarketItemSellEventFilter;
+    MarketItemSell(
       price?: null,
       itemId?: BigNumberish | null,
       tokenId?: BigNumberish | null,
       nftContract?: string | null,
       seller?: null,
-      buyer?: null
-    ): MarketItemSoldEventFilter;
+      owner?: null
+    ): MarketItemSellEventFilter;
   };
 
   estimateGas: {
+    createMarketBuy(
+      nftContract: string,
+      itemId: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     createMarketItem(
       nftContract: string,
       tokenId: BigNumberish,
@@ -314,9 +383,10 @@ export interface Marketplace extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    createMarketSale(
+    createMarketSell(
       nftContract: string,
       itemId: BigNumberish,
+      price: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -332,6 +402,12 @@ export interface Marketplace extends BaseContract {
   };
 
   populateTransaction: {
+    createMarketBuy(
+      nftContract: string,
+      itemId: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     createMarketItem(
       nftContract: string,
       tokenId: BigNumberish,
@@ -339,9 +415,10 @@ export interface Marketplace extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    createMarketSale(
+    createMarketSell(
       nftContract: string,
       itemId: BigNumberish,
+      price: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

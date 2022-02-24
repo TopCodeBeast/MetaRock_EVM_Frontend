@@ -49,12 +49,16 @@ const NFTBuyCard = ({ nft }: Props) => {
         </div>
         <div className="flex items-center space-x-2 justify-evenly">
           {
-            owner && isOwner() ?
-              nft.isSold ?
-                <div /> :
+            owner ?
+              isOwner() ?
                 <Button onClick={() => setSell(true)}>Sell</Button>
+                :
+                nft.isSold ?
+                  <div />
+                  :
+                  <Button onClick={() => setBuy(true)}>Buy</Button>
               :
-              <Button onClick={() => setBuy(true)}>Buy</Button>
+              <div />
           }
           <Link href={`/items/${nft.itemId}`} passHref>
             <Button type="secondary">Details</Button>

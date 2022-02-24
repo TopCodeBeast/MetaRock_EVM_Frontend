@@ -38,13 +38,8 @@ export const BuyDialog = ({ open, onClose, price, itemId, onComplete }: Props) =
     const provider = await getProvider();
     const signer = provider.getSigner();
 
-    console.log("buy provider", provider)
-    console.log("buy signer", signer)
-    console.log("buy Contract address", getTokenContract().address)
-    console.log("buy itemId", itemId.toString())
-    console.log("buy price", price)
     showSpinner();
-    const transaction = await getMarketContract(signer).createMarketSale(
+    const transaction = await getMarketContract(signer).createMarketBuy(
       getTokenContract().address,
       itemId.toString(),
       { value: price }

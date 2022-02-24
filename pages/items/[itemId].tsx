@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useSpinner } from "../../components/common/SpinnerContext";
 import { MarketItem } from "..";
 import { ethers } from "ethers";
-import { BlockchainContext } from "../context/BlockchainContext";
+import { BlockchainContext } from "../../context/BlockchainContext";
 
 
 import axios from "axios";
@@ -126,19 +126,20 @@ const ItemDetail = ({ }: Props) => {
               </div>
               <div className="flex-1"></div>
               {
-            owner ?
-              isOwner() ?
-                nft.isSold ?
-                  <div /> :
-                  <GlowButton onClick={() => setSell(true)}>Sell</GlowButton>
-                :
-                <GlowButton onClick={() => setBuy(true)}>Buy Now</GlowButton>
-              :
-              <div />
-          }
-              {/* <GlowButton onClick={() => setOpen(true)}>
-                {nft.isSold ? "Sell" : "Buy Now"}
-              </GlowButton> */}
+                owner
+                  ?
+                  isOwner()
+                    ?
+                    <GlowButton onClick={() => setSell(true)}>Sell</GlowButton>
+                    :
+                    nft.isSold 
+                      ?
+                      <div />
+                      :
+                      <GlowButton onClick={() => setBuy(true)}>Buy Now</GlowButton>
+                  :
+                  <div />
+              }
             </div>
 
             {buy && (

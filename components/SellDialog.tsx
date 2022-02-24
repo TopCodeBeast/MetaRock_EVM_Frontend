@@ -3,6 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ethers } from "ethers";
 import { getMarketContract, getTokenContract } from "../pages/api/blockchainService";
 import { BlockchainContext } from "../context/BlockchainContext";
+import { useSpinner } from "./common/SpinnerContext";
 
 interface Props {
   open: boolean;
@@ -13,6 +14,7 @@ interface Props {
 export const SellDialog = ({ open, itemId, onClose }: Props) => {
   const { getProvider } = useContext(BlockchainContext);
 
+  const { showSpinner, hideSpinner } = useSpinner();
   const [price, setPrice] = useState<string | undefined>();
 
   async function sellNFT(event: React.FormEvent<HTMLFormElement>) {
@@ -22,6 +24,8 @@ export const SellDialog = ({ open, itemId, onClose }: Props) => {
       alert("Enter a valid price");
       return;
     }
+    showSpinner();
+
     const provider = await getProvider();
     const signer = provider.getSigner();
 
@@ -30,20 +34,19 @@ export const SellDialog = ({ open, itemId, onClose }: Props) => {
     const marketContract = getMarketContract(signer);
     // const listingCommision = await marketContract.getListingCommision();
 
-    const transaction = await marketContract.createMarketItem(
+    const transaction = await marketContract.createMarketSell(
       nftContract.address,
       itemId.toString(),
-      ethers.utils.parseEther(price),
+      ethers.utils.parseEther(price!),
       // {
       //   value: listingCommision.toString(),
       // }
     );
 
-    console.log("transaction ", transaction);
-
     const tx = await transaction.wait();
-
+    onClose();
     console.log("tx ", tx);
+    hideSpinner
   }
 
   return (
@@ -88,7 +91,7 @@ export const SellDialog = ({ open, itemId, onClose }: Props) => {
                 />
                 <div className="absolute inset-y-0 right-0 flex items-center h-12 mt-10">
                   <div className="absolute inset-y-0 right-0 flex items-center px-4 ml-3 font-semibold rounded-r-lg pointer-events-none bg-primary">
-                  PRING
+                    PRING
                   </div>
                 </div>
               </div>

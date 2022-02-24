@@ -98,18 +98,19 @@ function CreateItem(props: Props) {
       image: imageCID,
     });
     const added = await client.add(tokenURI);
-    await createMarketSale(added.path);
+    await createMarketBuy(added.path);
 
     hideSpinner();
     router.push("/");
   };
 
-  async function createMarketSale(tokenURI: string) {
+  async function createMarketBuy(tokenURI: string) {
     const provider = await getProvider();
     const signer = provider.getSigner();
     const accounts = await provider.listAccounts();
     const tokenContract = getTokenContract(signer);
     let transaction = await tokenContract.createNFT(accounts[0], tokenURI);
+    console.log("transaction ", transaction)
     let tx = await transaction.wait();
 
     console.log("first tx", tx)
