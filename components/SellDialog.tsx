@@ -25,25 +25,25 @@ export const SellDialog = ({ open, itemId, onClose }: Props) => {
     const provider = await getProvider();
     const signer = provider.getSigner();
 
-    // const nftContract = getTokenContract(signer);
+    const nftContract = getTokenContract(signer);
 
-    // const marketContract = getMarketContract(signer);
+    const marketContract = getMarketContract(signer);
     // const listingCommision = await marketContract.getListingCommision();
 
-    // const transaction = await marketContract.createMarketItem(
-    //   nftContract.address,
-    //   itemId.toString(),
-    //   ethers.utils.parseEther(price!),
-    //   // {
-    //   //   value: listingCommision.toString(),
-    //   // }
-    // );
+    const transaction = await marketContract.createMarketItem(
+      nftContract.address,
+      itemId.toString(),
+      ethers.utils.parseEther(price),
+      // {
+      //   value: listingCommision.toString(),
+      // }
+    );
 
-    // console.log("transaction ", transaction);
+    console.log("transaction ", transaction);
 
-    // const tx = await transaction.wait();
+    const tx = await transaction.wait();
 
-    // console.log("tx ", tx);
+    console.log("tx ", tx);
   }
 
   return (
@@ -84,7 +84,7 @@ export const SellDialog = ({ open, itemId, onClose }: Props) => {
                   value={price}
                   className="block w-full h-12 pr-20 bg-[#282c36] border-none rounded-lg  focus:ring-primary text-lg font-inter"
                   placeholder="0.1"
-                  step=".1"
+                  step=".001"
                 />
                 <div className="absolute inset-y-0 right-0 flex items-center h-12 mt-10">
                   <div className="absolute inset-y-0 right-0 flex items-center px-4 ml-3 font-semibold rounded-r-lg pointer-events-none bg-primary">
