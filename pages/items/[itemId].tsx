@@ -1,24 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import { useSpinner } from "../../components/common/SpinnerContext";
 import { MarketItem } from "..";
 import { ethers } from "ethers";
+import { BlockchainContext } from "../context/BlockchainContext";
+
 
 import axios from "axios";
 import { getMarketContract, getTokenContract } from "../api/blockchainService";
 import { getEllipsisTxt } from "../../utils";
 import { BuyDialog } from "../../components/BuyDialog";
+import { SellDialog } from "../../components/SellDialog";
 import { GlowButton } from "../../components/common/GlowButton";
 
 type Props = {};
 
-const ItemDetail = ({}: Props) => {
+const ItemDetail = ({ }: Props) => {
   const { showSpinner, hideSpinner } = useSpinner();
   const [nft, setNFT] = useState<MarketItem>();
   const [owner, setOwner] = useState<string | undefined>();
-  const [open, setOpen] = useState(false);
+  const [buy, setBuy] = useState(false);
+  const [sell, setSell] = useState(false);
 
   const router = useRouter();
+  const { getProvider } = useContext(BlockchainContext);
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -26,13 +31,20 @@ const ItemDetail = ({}: Props) => {
     const { itemId } = router.query;
 
     fetchMarketItem(itemId as string).then(async (tokenId: number) => {
-      await setOwnerAddress(tokenId);
+      await setOwnerAddress();
     });
   }, [router.isReady]);
 
-  async function setOwnerAddress(tokenId: number) {
-    const owner = await getTokenContract().ownerOf(tokenId);
-    setOwner(owner);
+  // async function setOwnerAddress(tokenId: number) {
+  //   const owner = await getTokenContract().ownerOf(tokenId);
+  //   setOwner(owner);
+  // }
+
+  async function setOwnerAddress() {
+    const provider = await getProvider();
+    const accounts = await provider?.listAccounts();
+    if (provider && accounts[0])
+      setOwner(accounts[0]);
   }
 
   async function fetchMarketItem(itemId: string) {
@@ -53,7 +65,7 @@ const ItemDetail = ({}: Props) => {
       itemId: Number(itemId),
       price: nft.price,
     } as MarketItem);
-    console.log("nft",nft)
+    console.log("nft", nft)
     hideSpinner();
     return nft.tokenId.toNumber();
   }
@@ -113,20 +125,33 @@ const ItemDetail = ({}: Props) => {
                 </p>
               </div>
               <div className="flex-1"></div>
-              <GlowButton onClick={() => setOpen(true)}>
+              {
+            owner ?
+              isOwner() ?
+                nft.isSold ?
+                  <div /> :
+                  <GlowButton onClick={() => setSell(true)}>Sell</GlowButton>
+                :
+                <GlowButton onClick={() => setBuy(true)}>Buy Now</GlowButton>
+              :
+              <div />
+          }
+              {/* <GlowButton onClick={() => setOpen(true)}>
                 {nft.isSold ? "Sell" : "Buy Now"}
-              </GlowButton>
+              </GlowButton> */}
             </div>
 
-            {open && (
+            {buy && (
               <BuyDialog
-                open={open}
-                onClose={() => setOpen(false)}
+                open={buy}
+                onClose={() => setBuy(false)}
                 price={nft.price}
                 itemId={nft.itemId}
-                onComplete={() => setOpen(false)}
+                onComplete={() => setBuy(false)}
               />
             )}
+
+            <SellDialog itemId={nft.itemId} open={sell} onClose={() => setSell(false)} />
           </div>
         </div>
       </div>

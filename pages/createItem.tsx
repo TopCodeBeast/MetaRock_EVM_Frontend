@@ -11,7 +11,7 @@ import { getMarketContract, getTokenContract } from "./api/blockchainService";
 import { useRouter } from "next/router";
 import { BlockchainContext } from "../context/BlockchainContext";
 
-interface Props {}
+interface Props { }
 
 const client = create({ url: "https://ipfs.infura.io:5001/api/v0" });
 
@@ -129,7 +129,8 @@ function CreateItem(props: Props) {
     );
 
     tx = await transaction.wait();
-    console.log(tx);
+    console.log("second tx", tx)
+
   }
 
   return (

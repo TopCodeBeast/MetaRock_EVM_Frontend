@@ -1,34 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Link from "next/link";
 import { MarketItem } from "../pages";
 import { ethers } from "ethers";
 import Button from "./common/Button";
 import { BlockchainContext } from "../context/BlockchainContext";
 import { BuyDialog } from "./BuyDialog";
-import { SellDialog } from "./SellDialog";
 
 interface Props {
   nft: MarketItem;
 }
 
 const NFTBuyCard = ({ nft }: Props) => {
-  // const { getProvider } = useContext(BlockchainContext);
-  // const [owner, setOwner] = useState<string | undefined>();
-  const [buy, setBuy] = useState(false);
-  // const [sell, setSell] = useState(false);
-  // useEffect(() => {
-  //   async function setOwnerAddress() {
-  //     const provider = await getProvider();
-  //     const accounts = await provider?.listAccounts();
-  //     if (provider && accounts[0])
-  //       setOwner(accounts[0]);
-  //   }
-  //   setOwnerAddress();
-  // }, []);
-  // function isOwner() {
-  //   if (nft)
-  //     return nft.owner && owner == nft.owner;
-  // }
+  const [open, setOpen] = useState(false);
+
   return (
     <div className="relative text-gray-200 shadow-homogen bg-background rounded-2xl">
       <span className="absolute z-10 inline-flex items-center px-3 text-sm font-semibold text-white rounded-full bg-primary right-2 top-2">
@@ -48,36 +32,23 @@ const NFTBuyCard = ({ nft }: Props) => {
           </p>
         </div>
         <div className="flex items-center space-x-2 justify-evenly">
-          {/* {
-            owner ?
-              isOwner() ?
-                nft.isSold ?
-                  <div /> :
-                  <Button onClick={() => setSell(true)}>Sell</Button>
-                :
-                <Button onClick={() => setBuy(true)}>Buy</Button>
-              :
-              <div />
-          } */}
-                  <Button onClick={() => setBuy(true)}>Buy</Button>
+          <Button onClick={() => setOpen(true)}>Buy</Button>
+
           <Link href={`/items/${nft.itemId}`} passHref>
             <Button type="secondary">Details</Button>
           </Link>
         </div>
       </div>
 
-
-      {buy && (
+      {open && (
         <BuyDialog
-          open={buy}
-          onClose={() => setBuy(false)}
+          open={open}
+          onClose={() => setOpen(false)}
           price={nft.price}
           itemId={nft.itemId}
-          onComplete={() => setBuy(false)}
+          onComplete={() => setOpen(false)}
         />
       )}
-
-      {/* <SellDialog itemId={nft.itemId} open={sell} onClose={() => setSell(false)} /> */}
     </div>
   );
 };

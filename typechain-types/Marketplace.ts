@@ -51,7 +51,7 @@ export interface MarketplaceInterface extends utils.Interface {
     "createMarketSale(address,uint256)": FunctionFragment;
     "getAllMarketItems()": FunctionFragment;
     "getListingCommision()": FunctionFragment;
-    "getMyNFTs()": FunctionFragment;
+    "getMyNFTs(address)": FunctionFragment;
     "getNFT(uint256)": FunctionFragment;
     "getNFTsCreated()": FunctionFragment;
   };
@@ -72,7 +72,7 @@ export interface MarketplaceInterface extends utils.Interface {
     functionFragment: "getListingCommision",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "getMyNFTs", values?: undefined): string;
+  encodeFunctionData(functionFragment: "getMyNFTs", values: [string]): string;
   encodeFunctionData(
     functionFragment: "getNFT",
     values: [BigNumberish]
@@ -189,7 +189,10 @@ export interface Marketplace extends BaseContract {
 
     getListingCommision(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getMyNFTs(overrides?: CallOverrides): Promise<[MarketItemStructOutput[]]>;
+    getMyNFTs(
+      MyAddress: string,
+      overrides?: CallOverrides
+    ): Promise<[MarketItemStructOutput[]]>;
 
     getNFT(
       itemId: BigNumberish,
@@ -220,7 +223,10 @@ export interface Marketplace extends BaseContract {
 
   getListingCommision(overrides?: CallOverrides): Promise<BigNumber>;
 
-  getMyNFTs(overrides?: CallOverrides): Promise<MarketItemStructOutput[]>;
+  getMyNFTs(
+    MyAddress: string,
+    overrides?: CallOverrides
+  ): Promise<MarketItemStructOutput[]>;
 
   getNFT(
     itemId: BigNumberish,
@@ -249,7 +255,10 @@ export interface Marketplace extends BaseContract {
 
     getListingCommision(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getMyNFTs(overrides?: CallOverrides): Promise<MarketItemStructOutput[]>;
+    getMyNFTs(
+      MyAddress: string,
+      overrides?: CallOverrides
+    ): Promise<MarketItemStructOutput[]>;
 
     getNFT(
       itemId: BigNumberish,
@@ -315,7 +324,7 @@ export interface Marketplace extends BaseContract {
 
     getListingCommision(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getMyNFTs(overrides?: CallOverrides): Promise<BigNumber>;
+    getMyNFTs(MyAddress: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     getNFT(itemId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -342,7 +351,10 @@ export interface Marketplace extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getMyNFTs(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getMyNFTs(
+      MyAddress: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getNFT(
       itemId: BigNumberish,

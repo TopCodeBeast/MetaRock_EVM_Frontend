@@ -6,7 +6,7 @@ import { MarketItem } from ".";
 import NFTCard from "../components/NFTCard";
 import { BlockchainContext } from "../context/BlockchainContext";
 
-interface Props {}
+interface Props { }
 
 function MyNFTs(props: Props) {
   const { getProvider } = useContext(BlockchainContext);
@@ -26,9 +26,9 @@ function MyNFTs(props: Props) {
     }
 
     const signer = provider.getSigner();
-
+    const accounts = await provider.listAccounts();
     const marketContract = getMarketContract(signer);
-    const marketNFTs = await marketContract.getMyNFTs();
+    const marketNFTs = await marketContract.getMyNFTs(accounts[0]);
     const myNFTs = await convertMarketItemStructs2MarketItems(marketNFTs);
     setNFTs(myNFTs);
     hideSpinner();

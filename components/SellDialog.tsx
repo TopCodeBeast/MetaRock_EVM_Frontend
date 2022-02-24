@@ -25,25 +25,25 @@ export const SellDialog = ({ open, itemId, onClose }: Props) => {
     const provider = await getProvider();
     const signer = provider.getSigner();
 
-    const nftContract = getTokenContract(signer);
+    // const nftContract = getTokenContract(signer);
 
-    const marketContract = getMarketContract(signer);
-    const listingCommision = await marketContract.getListingCommision();
+    // const marketContract = getMarketContract(signer);
+    // const listingCommision = await marketContract.getListingCommision();
 
-    const transaction = await marketContract.createMarketItem(
-      nftContract.address,
-      itemId.toString(),
-      ethers.utils.parseEther(price!),
-      // {
-      //   value: listingCommision.toString(),
-      // }
-    );
+    // const transaction = await marketContract.createMarketItem(
+    //   nftContract.address,
+    //   itemId.toString(),
+    //   ethers.utils.parseEther(price!),
+    //   // {
+    //   //   value: listingCommision.toString(),
+    //   // }
+    // );
 
-    console.log("transaction ", transaction);
+    // console.log("transaction ", transaction);
 
-    const tx = await transaction.wait();
+    // const tx = await transaction.wait();
 
-    console.log("tx ", tx);
+    // console.log("tx ", tx);
   }
 
   return (
