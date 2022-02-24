@@ -53,6 +53,7 @@ const ItemDetail = ({}: Props) => {
       itemId: Number(itemId),
       price: nft.price,
     } as MarketItem);
+    console.log("nft",nft)
     hideSpinner();
     return nft.tokenId.toNumber();
   }
@@ -108,7 +109,7 @@ const ItemDetail = ({}: Props) => {
                 </label>
                 <p className="text-xl font-bold text-white font-inter">
                   <img src="/eth.svg" className="inline w-5 h-5 filter brightness-300" /> {price}{" "}
-                  ETH
+                  PRING
                 </p>
               </div>
               <div className="flex-1"></div>

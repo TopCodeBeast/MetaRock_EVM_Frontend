@@ -38,12 +38,18 @@ export const BuyDialog = ({ open, onClose, price, itemId, onComplete }: Props) =
     const provider = await getProvider();
     const signer = provider.getSigner();
 
+    console.log("buy provider", provider)
+    console.log("buy signer", signer)
+    console.log("buy Contract address", getTokenContract().address)
+    console.log("buy itemId", itemId.toString())
+    console.log("buy price", price)
     showSpinner();
     const transaction = await getMarketContract(signer).createMarketSale(
       getTokenContract().address,
       itemId.toString(),
       { value: price }
     );
+    console.log("transaction", transaction)
     const tx = await transaction.wait();
     console.log("tx ", tx);
     onComplete();
@@ -92,7 +98,7 @@ export const BuyDialog = ({ open, onClose, price, itemId, onComplete }: Props) =
                 <p className="font-semibold text-gray-500">
                   Your balance
                   <span className="float-right font-medium text-gray-200 font-inter">
-                    {balance && Number(ethers.utils.formatEther(balance)).toFixed(2)} ETH
+                    {balance && Number(ethers.utils.formatEther(balance)).toFixed(2)} PRING
                   </span>
                 </p>
               </div>
@@ -100,7 +106,7 @@ export const BuyDialog = ({ open, onClose, price, itemId, onComplete }: Props) =
                 <p className="font-semibold text-gray-500">
                   Price{" "}
                   <span className="float-right font-medium text-gray-200 font-inter">
-                    {ethers.utils.formatEther(price)} ETH
+                    {ethers.utils.formatEther(price)} PRING
                   </span>
                 </p>
               </div>
@@ -109,7 +115,7 @@ export const BuyDialog = ({ open, onClose, price, itemId, onComplete }: Props) =
                 <p className="font-semibold text-gray-500">
                   Remaining balance after purchase
                   <span className="float-right font-semibold text-white font-inter">
-                    {balance && getRemainingBalanceAfterPurchase()} ETH
+                    {balance && getRemainingBalanceAfterPurchase()} PRING
                   </span>
                 </p>
               </div>

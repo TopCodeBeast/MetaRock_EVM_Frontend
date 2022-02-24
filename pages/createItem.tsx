@@ -107,11 +107,12 @@ function CreateItem(props: Props) {
   async function createMarketSale(tokenURI: string) {
     const provider = await getProvider();
     const signer = provider.getSigner();
-
+    const accounts = await provider.listAccounts();
     const tokenContract = getTokenContract(signer);
-    let transaction = await tokenContract.createBoredHera(tokenURI);
+    let transaction = await tokenContract.createNFT(accounts[0], tokenURI);
     let tx = await transaction.wait();
 
+    console.log("first tx", tx)
     const tokenId = tx!.events![0].args![2];
     //const price = ethers.utils.parseUnits(inputs.price!, "ether");
 
@@ -122,9 +123,9 @@ function CreateItem(props: Props) {
       tokenContract.address,
       tokenId.toString(),
       inputs.price!,
-      {
-        value: listingCommision.toString(),
-      }
+      // {
+      //   value: listingCommision.toString(),
+      // }
     );
 
     tx = await transaction.wait();
@@ -248,12 +249,12 @@ function CreateItem(props: Props) {
               onChange={handleChange}
               value={ethers.utils.formatEther(inputs.price!)}
               className="block w-full h-10 pr-16 bg-[#282c36] border-none rounded-lg focus:ring-primary sm:text-sm"
-              placeholder="0.5"
-              step=".1"
+              placeholder="0.1"
+              step=".001"
             />
             <div className="absolute inset-y-0 right-0 flex items-center h-10 mt-6">
               <div className="absolute inset-y-0 right-0 flex items-center px-4 ml-3 font-semibold rounded-r-lg pointer-events-none bg-primary">
-                ETH
+                PRING
               </div>
             </div>
           </div>

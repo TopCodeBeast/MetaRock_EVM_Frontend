@@ -34,9 +34,9 @@ export const SellDialog = ({ open, itemId, onClose }: Props) => {
       nftContract.address,
       itemId.toString(),
       ethers.utils.parseEther(price!),
-      {
-        value: listingCommision.toString(),
-      }
+      // {
+      //   value: listingCommision.toString(),
+      // }
     );
 
     console.log("transaction ", transaction);
@@ -88,7 +88,7 @@ export const SellDialog = ({ open, itemId, onClose }: Props) => {
                 />
                 <div className="absolute inset-y-0 right-0 flex items-center h-12 mt-10">
                   <div className="absolute inset-y-0 right-0 flex items-center px-4 ml-3 font-semibold rounded-r-lg pointer-events-none bg-primary">
-                    ETH
+                  PRING
                   </div>
                 </div>
               </div>

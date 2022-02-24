@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
-import { HeraCollection } from "../../typechain-types/HeraCollection";
+import { MetaRockCollection } from "../../typechain-types/MetaRockCollection";
 import { Marketplace } from "../../typechain-types/Marketplace";
 import { marketAddress, nftAddress } from "../../config";
-import NFT from "../../contracts/HeraCollection.sol/HeraCollection.json";
+import NFT from "../../contracts/MetaRockCollection.sol/MetaRockCollection.json";
 import Market from "../../contracts/Marketplace.sol/Marketplace.json";
 
 export const rpcProvider = new ethers.providers.JsonRpcProvider(
@@ -22,5 +22,5 @@ export function getTokenContract(signer?: any) {
   if (signer) {
     provider = signer;
   }
-  return new ethers.Contract(nftAddress, NFT.abi, provider) as HeraCollection;
+  return new ethers.Contract(nftAddress, NFT.abi, provider) as MetaRockCollection;
 }

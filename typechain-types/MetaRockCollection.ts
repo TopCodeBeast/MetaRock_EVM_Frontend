@@ -17,11 +17,11 @@ import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
 import { Listener, Provider } from "@ethersproject/providers";
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
-export interface HeraCollectionInterface extends utils.Interface {
+export interface MetaRockCollectionInterface extends utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "createBoredHera(string)": FunctionFragment;
+    "createNFT(address,string)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "name()": FunctionFragment;
@@ -40,8 +40,8 @@ export interface HeraCollectionInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "createBoredHera",
-    values: [string]
+    functionFragment: "createNFT",
+    values: [string, string]
   ): string;
   encodeFunctionData(
     functionFragment: "getApproved",
@@ -80,10 +80,7 @@ export interface HeraCollectionInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "createBoredHera",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "createNFT", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
@@ -145,12 +142,12 @@ export type TransferEvent = TypedEvent<
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-export interface HeraCollection extends BaseContract {
+export interface MetaRockCollection extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: HeraCollectionInterface;
+  interface: MetaRockCollectionInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -180,7 +177,8 @@ export interface HeraCollection extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    createBoredHera(
+    createNFT(
+      to: string,
       tokenURI: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -252,7 +250,8 @@ export interface HeraCollection extends BaseContract {
 
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  createBoredHera(
+  createNFT(
+    to: string,
     tokenURI: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -318,7 +317,8 @@ export interface HeraCollection extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    createBoredHera(
+    createNFT(
+      to: string,
       tokenURI: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -420,7 +420,8 @@ export interface HeraCollection extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    createBoredHera(
+    createNFT(
+      to: string,
       tokenURI: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -496,7 +497,8 @@ export interface HeraCollection extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    createBoredHera(
+    createNFT(
+      to: string,
       tokenURI: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

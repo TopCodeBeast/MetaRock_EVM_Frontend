@@ -28,7 +28,7 @@ const NFTCard = ({ nft }: Props) => {
           <p className="text-lg text-gray-400">{nft.description}</p>
           <p className="inline-flex justify-between w-full text-2xl font-bold text-white font-inter">
             <span className="text-xl font-medium text-gray-400">Last price </span>{" "}
-            {ethers.utils.formatEther(nft.price)} ETH
+            {ethers.utils.formatEther(nft.price)} PRING
           </p>
         </div>
         <div className="flex items-center space-x-2 justify-evenly">
