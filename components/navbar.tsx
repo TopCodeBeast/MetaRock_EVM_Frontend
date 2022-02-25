@@ -57,22 +57,22 @@ export const Navbar = (props: Props) => {
                 </Disclosure.Button>
               </div>
               <div className="flex items-center justify-center flex-1 sm:items-stretch sm:justify-start">
-                {/* <div className="flex items-center flex-shrink-0">
+                <div className="flex items-center flex-shrink-0">
                   <Link href="/">
                     <img
-                      className="block w-8 h-8 cursor-pointer lg:hidden"
-                      src="/n-big.png"
-                      alt="N letter logo"
+                      className="block w-20 h-12 cursor-pointer lg:hidden"
+                      src="/favicon.png"
+                      alt="MetaRock logo"
                     />
                   </Link>
                   <Link href="/">
                     <img
-                      className="hidden w-8 h-8 cursor-pointer lg:block"
-                      src="/n-big.png"
-                      alt="N letter logo"
+                      className="hidden w-20 h-12 cursor-pointer lg:block"
+                      src="/favicon.png"
+                      alt="MetaRock logo"
                     />
                   </Link>
-                </div> */}
+                </div>
                 <div className="hidden sm:block sm:ml-12">
                   <div className="flex space-x-12">
                     {navigation.map((item) => {

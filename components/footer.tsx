@@ -22,7 +22,7 @@ export const Footer = (props: Props) => {
           <br />
           Full stack developer
         </p> */}
-        <p>Copyright © 2021 - All right reserved</p>
+        <p>Copyright © 2022 - All right reserved</p>
       </div>
       {/* <div>
         <div className="flex justify-center mt-5 space-x-6">
