@@ -1,7 +1,6 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { SpinnerProvider } from "../components/common/SpinnerContext";
-import { Navbar } from "../components/navbar";
 import Layout from "../components/layout";
 import { BlockchainProvider } from "../context/BlockchainContext";
 

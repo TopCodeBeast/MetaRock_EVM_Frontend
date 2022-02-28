@@ -10,12 +10,12 @@ import WalletSvg from "./svg/WalletSvg";
 import { AppContextProps, BlockchainContext } from "../context/BlockchainContext";
 import { ContextType } from "react";
 
-interface Props {}
+interface Props { }
 
 const navigation = [
-  { name: "Home", href: "/" },
-  { name: "My NFTs", href: "/myNFTs" },
-  { name: "Create NFT", href: "/createItem" },
+  { name: "My Space", href: "/myNFTs" },
+  { name: "Explore", href: "/explore" },
+  { name: "Info", href: "/" },
 ];
 
 export const Navbar = (props: Props) => {
@@ -75,11 +75,18 @@ export const Navbar = (props: Props) => {
                 </div>
                 <div className="hidden sm:block sm:ml-12">
                   <div className="flex space-x-12">
+                    <Link href="/">
+                      <div className="px-3 py-2 font-medium border-b-2 border-transparent cursor-pointer">
+                        <button
+                          className="px-4 py-2 font-semibold transition border-2 rounded-full shadow-lg hover:border-success hover:text-success hover:shadow-success/30 border-success/80 text-success/90 shadow-success/10"
+                        >
+                          Swap Crypto</button>
+                      </div>
+                    </Link>
                     {navigation.map((item) => {
-                      if (item.name == "Create NFT") return;
                       return (
                         <Link key={item.name} href={item.href}>
-                          <div className="px-3 py-2 font-medium border-b-2 border-transparent cursor-pointer">
+                          <div className="pr-1 py-4 font-medium border-b-2 border-transparent cursor-pointer">
                             {item.name}
                           </div>
                         </Link>
@@ -90,7 +97,15 @@ export const Navbar = (props: Props) => {
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 space-x-4 font-medium sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <Link href="/createItem">
-                  <button className="hidden font-medium md:block">Create NFT</button>
+                  <button
+                    className="px-4 py-2 font-semibold transition border-2 rounded-full shadow-lg hover:border-success hover:text-success hover:shadow-success/30 border-success/80 text-success/90 shadow-success/10"
+                    style={{
+                      border: 'none',
+                      background: 'linear-gradient(180deg,#6200e9, #ff1a9a)',
+                      color: '#fff',
+                    }}
+                  >
+                    Create NFT</button>
                 </Link>
                 {connectedAccount ? (
                   <Menu as="div" className="relative ml-3">
