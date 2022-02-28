@@ -120,14 +120,14 @@ const ItemDetail = ({ }: Props) => {
                   {isOwner() ? "Last Price" : "Price"}
                 </label>
                 {
-                  price ?
+                  nft.price.toString() != '0'  ?
                     <p className="text-xl font-bold text-white font-inter">
                       <img src="/eth.svg" className="inline w-5 h-5 filter brightness-300" /> {price}{" "}
                       PRING
                     </p>
                     :
                     <p className="text-xl font-bold text-white font-inter">
-                      Not Sale
+                      Not for Sale
                     </p>
                 }
 
