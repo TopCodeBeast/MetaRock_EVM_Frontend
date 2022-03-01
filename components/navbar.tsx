@@ -75,7 +75,7 @@ export const Navbar = (props: Props) => {
                 </div>
                 <div className="hidden sm:block sm:ml-12">
                   <div className="flex space-x-12">
-                    <Link href="/">
+                    <Link href="http://metarock.network:8080">
                       <div className="px-3 py-2 font-medium border-b-2 border-transparent cursor-pointer">
                         <button
                           className="px-4 py-2 font-semibold transition border-2 rounded-full shadow-lg hover:border-success hover:text-success hover:shadow-success/30 border-success/80 text-success/90 shadow-success/10"
