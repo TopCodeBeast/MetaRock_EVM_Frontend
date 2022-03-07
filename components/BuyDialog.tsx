@@ -93,7 +93,7 @@ export const BuyDialog = ({ open, onClose, price, itemId, onComplete }: Props) =
                 <p className="font-semibold text-gray-500">
                   Your balance
                   <span className="float-right font-medium text-gray-200 font-inter">
-                    {balance && Number(ethers.utils.formatEther(balance)).toFixed(2)} PRING
+                    {balance && Number(ethers.utils.formatEther(balance)).toFixed(2)} Crab
                   </span>
                 </p>
               </div>
@@ -101,7 +101,7 @@ export const BuyDialog = ({ open, onClose, price, itemId, onComplete }: Props) =
                 <p className="font-semibold text-gray-500">
                   Price{" "}
                   <span className="float-right font-medium text-gray-200 font-inter">
-                    {ethers.utils.formatEther(price)} PRING
+                    {ethers.utils.formatEther(price)} Crab
                   </span>
                 </p>
               </div>
@@ -110,7 +110,7 @@ export const BuyDialog = ({ open, onClose, price, itemId, onComplete }: Props) =
                 <p className="font-semibold text-gray-500">
                   Remaining balance after purchase
                   <span className="float-right font-semibold text-white font-inter">
-                    {balance && getRemainingBalanceAfterPurchase()} PRING
+                    {balance && getRemainingBalanceAfterPurchase()} Crab
                   </span>
                 </p>
               </div>

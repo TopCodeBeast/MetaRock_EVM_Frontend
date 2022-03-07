@@ -256,7 +256,7 @@ function CreateItem(props: Props) {
             />
             <div className="absolute inset-y-0 right-0 flex items-center h-10 mt-6">
               <div className="absolute inset-y-0 right-0 flex items-center px-4 ml-3 font-semibold rounded-r-lg pointer-events-none bg-primary">
-                PRING
+                Crab
               </div>
             </div>
           </div>

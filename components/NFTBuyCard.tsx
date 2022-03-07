@@ -46,7 +46,7 @@ const NFTBuyCard = ({ nft }: Props) => {
           {
             nft.price.toString() != '0' ?
               <p className="text-2xl font-bold text-white font-inter">
-                {ethers.utils.formatEther(nft.price)} PRING
+                {ethers.utils.formatEther(nft.price)} Crab
               </p>
               :
               <p className="text-2xl font-bold text-white font-inter">
