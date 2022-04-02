@@ -5,22 +5,23 @@ import { MarketItem } from "..";
 import { ethers } from "ethers";
 import { BlockchainContext } from "../../context/BlockchainContext";
 
-
 import axios from "axios";
 import { getMarketContract, getTokenContract } from "../api/blockchainService";
 import { getEllipsisTxt } from "../../utils";
 import { BuyDialog } from "../../components/BuyDialog";
 import { SellDialog } from "../../components/SellDialog";
-import { GlowButton } from "../../components/common/GlowButton";
+import { SendDialog } from "../../components/SendDialog";
+import Button from "../../components/common/Button";
 
 type Props = {};
 
-const ItemDetail = ({ }: Props) => {
+const ItemDetail = ({}: Props) => {
   const { showSpinner, hideSpinner } = useSpinner();
   const [nft, setNFT] = useState<MarketItem>();
   const [owner, setOwner] = useState<string | undefined>();
   const [buy, setBuy] = useState(false);
   const [sell, setSell] = useState(false);
+  const [send, setSend] = useState(false);
 
   const router = useRouter();
   const { getProvider } = useContext(BlockchainContext);
@@ -43,8 +44,7 @@ const ItemDetail = ({ }: Props) => {
   async function setOwnerAddress() {
     const provider = await getProvider();
     const accounts = await provider?.listAccounts();
-    if (provider && accounts[0])
-      setOwner(accounts[0]);
+    if (provider && accounts[0]) setOwner(accounts[0]);
   }
 
   async function fetchMarketItem(itemId: string) {
@@ -65,7 +65,7 @@ const ItemDetail = ({ }: Props) => {
       itemId: Number(itemId),
       price: nft.price,
     } as MarketItem);
-    console.log("nft", nft)
+    console.log("nft", nft);
     hideSpinner();
     return nft.tokenId.toNumber();
   }
@@ -103,14 +103,18 @@ const ItemDetail = ({ }: Props) => {
               <div className="grid grid-cols-2">
                 <div className="flex flex-col col-span-2 xl:col-span-1">
                   <label className="font-semibold text-gray-500 text-md">
-                    {isOwner() ? "Owner" : "Seller"}
+                    {/* {isOwner() ? "Owner" : "Seller"} */}
+                    Current Owner
                   </label>
                   <p className="text-xl font-semibold lowercase font-poppins">
-                    {owner && getEllipsisTxt(owner)}
+                    {/* {owner && getEllipsisTxt(owner)} */}
+                    {nft.owner && getEllipsisTxt(nft.owner)}
                   </p>
                 </div>
                 <div className="flex flex-col col-span-2 xl:col-span-1">
-                  <label className="font-semibold text-gray-500 text-md">Collection</label>
+                  <label className="font-semibold text-gray-500 text-md">
+                    Collection
+                  </label>
                   <p className="text-xl font-semibold ">MetaRock</p>
                 </div>
               </div>
@@ -119,35 +123,37 @@ const ItemDetail = ({ }: Props) => {
                 <label className="font-semibold text-gray-500 text-md">
                   {isOwner() ? "Last Price" : "Price"}
                 </label>
-                {
-                  nft.price.toString() != '0'  ?
-                    <p className="text-xl font-bold text-white font-inter">
-                      <img src="/eth.svg" className="inline w-5 h-5 filter brightness-300" /> {price}{" "}
-                      PRING
-                    </p>
-                    :
-                    <p className="text-xl font-bold text-white font-inter">
-                      Not for Sale
-                    </p>
-                }
-
+                {nft.price.toString() != "0" ? (
+                  <p className="text-xl font-bold text-white font-inter">
+                    <img
+                      src="/eth.svg"
+                      className="inline w-5 h-5 filter brightness-300"
+                    />{" "}
+                    {price} PRING
+                  </p>
+                ) : (
+                  <p className="text-xl font-bold text-white font-inter">
+                    Not for Sale
+                  </p>
+                )}
               </div>
               <div className="flex-1"></div>
-              {
-                owner
-                  ?
-                  isOwner()
-                    ?
-                    <GlowButton onClick={() => setSell(true)}>Sell</GlowButton>
-                    :
-                    nft.isSold
-                      ?
-                      <div />
-                      :
-                      <GlowButton onClick={() => setBuy(true)}>Buy Now</GlowButton>
-                  :
+              {owner ? (
+                isOwner() ? (
+                  <div className="flex items-center space-x-2 justify-evenly">
+                    <Button onClick={() => setSell(true)}>Sell</Button>
+                    <Button type="secondary" onClick={() => setSend(true)}>
+                      Send
+                    </Button>
+                  </div>
+                ) : nft.isSold ? (
                   <div />
-              }
+                ) : (
+                  <Button onClick={() => setBuy(true)}>Buy Now</Button>
+                )
+              ) : (
+                <div />
+              )}
             </div>
 
             {buy && (
@@ -160,7 +166,21 @@ const ItemDetail = ({ }: Props) => {
               />
             )}
 
-            <SellDialog itemId={nft.itemId} open={sell} onClose={() => setSell(false)} />
+            {sell && (
+              <SellDialog
+                itemId={nft.itemId}
+                open={sell}
+                onClose={() => setSell(false)}
+              />
+            )}
+
+            {send && (
+              <SendDialog
+                itemId={nft.itemId}
+                open={send}
+                onClose={() => setSend(false)}
+              />
+            )}
           </div>
         </div>
       </div>

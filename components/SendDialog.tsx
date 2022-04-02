@@ -11,17 +11,17 @@ interface Props {
   itemId: number;
 }
 
-export const SellDialog = ({ open, itemId, onClose }: Props) => {
+export const SendDialog = ({ open, itemId, onClose }: Props) => {
   const { getProvider } = useContext(BlockchainContext);
 
   const { showSpinner, hideSpinner } = useSpinner();
-  const [price, setPrice] = useState<string | undefined>();
+  const [toAddress, setToAddress] = useState<string | undefined>();
 
-  async function sellNFT(event: React.FormEvent<HTMLFormElement>) {
+  async function sendNFT(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!price || (price && Number(price) <= 0)) {
-      alert("Enter a valid price");
+    if (!toAddress ) {
+      alert("Enter Address!");
       return;
     }
     showSpinner();
@@ -34,13 +34,10 @@ export const SellDialog = ({ open, itemId, onClose }: Props) => {
     const marketContract = getMarketContract(signer);
     // const listingCommision = await marketContract.getListingCommision();
 
-    const transaction = await marketContract.createMarketSell(
+    const transaction = await marketContract.createMarketSend(
       nftContract.address,
       itemId.toString(),
-      ethers.utils.parseEther(price!),
-      // {
-      //   value: listingCommision.toString(),
-      // }
+      toAddress
     );
 
     const tx = await transaction.wait();
@@ -52,10 +49,9 @@ export const SellDialog = ({ open, itemId, onClose }: Props) => {
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto " onClose={onClose}>
-        <form onSubmit={sellNFT} className="min-h-screen px-4 text-center">
+        <form onSubmit={sendNFT} className="min-h-screen px-4 text-center">
           <Dialog.Overlay className="fixed inset-0 transition bg-black opacity-70" />
 
-          {/* This element is to trick the browser into centering the modal contents. */}
           <span className="inline-block h-screen align-middle" aria-hidden="true">
             &#8203;
           </span>
@@ -70,30 +66,22 @@ export const SellDialog = ({ open, itemId, onClose }: Props) => {
           >
             <div className="inline-block w-full max-w-md p-8 my-8 overflow-hidden text-left align-middle transition-all transform shadow-homogen bg-background rounded-2xl">
               <Dialog.Title as="h2" className="text-2xl font-medium leading-6 text-white">
-                Sell NFT
+                Send NFT
               </Dialog.Title>
               <div className="w-full h-0.5 my-4 bg-gray-500 rounded-full"></div>
 
               <div className="relative mt-8 rounded-md shadow-sm">
-                <label htmlFor="price" className="block mb-4 font-medium text-gray-300 text-md">
-                  Price
+                <label htmlFor="address" className="block mb-4 font-medium text-gray-300 text-md">
+                  Address
                 </label>
                 <input
                   required
-                  type="number"
-                  id="price"
-                  name="price"
-                  onChange={(e) => setPrice(e.target.value)}
-                  value={price}
+                  id="address"
+                  name="address"
+                  onChange={(e) => setToAddress(e.target.value)}
                   className="block w-full h-12 pr-20 bg-[#282c36] border-none rounded-lg  focus:ring-primary text-lg font-inter"
-                  placeholder="0.1"
-                  step=".001"
+                  placeholder="XXXXXXXX"
                 />
-                <div className="absolute inset-y-0 right-0 flex items-center h-12 mt-10">
-                  <div className="absolute inset-y-0 right-0 flex items-center px-4 ml-3 font-semibold rounded-r-lg pointer-events-none bg-primary">
-                    PRING
-                  </div>
-                </div>
               </div>
 
               <div className="mt-10">
@@ -101,7 +89,7 @@ export const SellDialog = ({ open, itemId, onClose }: Props) => {
                   type="submit"
                   className="block w-full py-2 font-semibold rounded-full bg-primary text-md"
                 >
-                  Sell
+                  Send
                 </button>
               </div>
             </div>

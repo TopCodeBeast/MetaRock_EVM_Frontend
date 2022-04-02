@@ -71,7 +71,7 @@ const Home: NextPage = () => {
             <div className="container mx-auto mt-28">
                 <section ref={nftsRef} className="container mx-auto mt-8 md:mt-2 scroll-mt-28">
                     <h1 className="text-4xl font-semibold text-center ">
-                        Latest <span className="text-primary">NTFs</span>
+                        <span className="text-primary">NTFs</span>
                     </h1>
                     <div className="grid grid-cols-1 gap-10 py-8 md:grid-cols-2 lg:grid-cols-3">
                         {NFTs && NFTs.length > 0 ? (
