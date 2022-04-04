@@ -9,6 +9,7 @@ import { getMarketContract, getTokenContract } from "./api/blockchainService";
 import { GlowButton } from "../components/common/GlowButton";
 import NFTBuyCard from "../components/NFTBuyCard";
 import { useSpinner } from "../components/common/SpinnerContext";
+import Link from "next/link";
 
 const defaultOptions = {
   loop: true,
@@ -66,7 +67,8 @@ const Home: NextPage = () => {
 
   const nftsRef = useRef<null | HTMLDivElement>(null);
 
-  const executeScroll = () => nftsRef!.current!.scrollIntoView({ behavior: "smooth" });
+  const executeScroll = () =>
+    nftsRef!.current!.scrollIntoView({ behavior: "smooth" });
 
   return (
     <>
@@ -79,7 +81,10 @@ const Home: NextPage = () => {
           <h4 className="mt-8 text-lg font-medium leading-relaxed text-gray-200 ">
             You can find your favorite NFTs with good prices
           </h4>
-          <GlowButton onClick={executeScroll}>Explore Now</GlowButton>
+          {/* <GlowButton onClick={executeScroll}>Explore Now</GlowButton> */}
+          <Link href="/explore">
+            <GlowButton>Explore Now</GlowButton>
+          </Link>
         </div>
 
         <div className="order-1 w-3/4 md:w-1/2 sm:order-2">
@@ -87,7 +92,7 @@ const Home: NextPage = () => {
         </div>
       </div>
 
-      <section ref={nftsRef} className="container mx-auto mt-8 md:mt-2 scroll-mt-28">
+      {/* <section ref={nftsRef} className="container mx-auto mt-8 md:mt-2 scroll-mt-28">
         <h1 className="text-4xl font-semibold text-center ">
           Latest <span className="text-primary">NTFs</span>
         </h1>
@@ -98,7 +103,7 @@ const Home: NextPage = () => {
             <div>No NFTs in marketplace</div>
           )}
         </div>
-      </section>
+      </section> */}
     </>
   );
 };
